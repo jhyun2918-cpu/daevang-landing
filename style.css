@@ -687,19 +687,42 @@ footer {
     color: var(--primary-color);
 }
 
-/* Mobile Fixed Call Button */
-.mobile-fixed-call {
+/* Mobile Fixed Buttons Bar */
+.mobile-fixed-btns {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: linear-gradient(135deg, #1d8233 0%, #156126 100%);
-    color: var(--white);
-    text-align: center;
-    padding: 18px;
-    font-size: 1.2rem;
-    font-weight: 900;
-    text-decoration: none;
+    display: flex;
+    height: 65px;
     z-index: 2000;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+}
+
+.fixed-call-btn, .fixed-listing-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 900;
+    border: none;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.fixed-call-btn {
+    background: linear-gradient(135deg, #1d8233 0%, #156126 100%);
+    color: var(--white);
+}
+
+.fixed-listing-btn {
+    background: var(--gold-gradient);
+    color: #000;
+}
+
+.fixed-call-btn:active, .fixed-listing-btn:active {
+    filter: brightness(0.8);
 }
 
 .mobile-br {

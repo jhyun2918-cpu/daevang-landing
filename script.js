@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToMainBtn = document.getElementById('back-to-main');
     const logoLink = document.getElementById('logo-link');
     const listingForm = document.getElementById('listingForm');
+    const showListingBtnFixed = document.getElementById('show-listing-btn-fixed');
 
     // 화면 전환 함수
     function toggleView(showRegistration) {
@@ -34,9 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 간편 매물 접수 버튼 클릭
+    // 간편 매물 접수 버튼 클릭 (기존 & 하단 고정 버튼 공통)
     if (showListingBtn) {
         showListingBtn.addEventListener('click', function() {
+            toggleView(true);
+        });
+    }
+
+    if (showListingBtnFixed) {
+        showListingBtnFixed.addEventListener('click', function() {
             toggleView(true);
         });
     }
