@@ -702,8 +702,29 @@ footer {
     box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
 }
 
+.mobile-br {
+    display: none;
+}
+
 @media (max-width: 480px) {
     .logo { font-size: 1.3rem; }
     .header-btns { gap: 6px; }
     .hero h2 { font-size: 1.6rem; }
+    
+    /* 비즈니스 카드 모바일 최적화 */
+    .contact-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .contact-item {
+        font-size: 0.9rem;
+    }
+    .address {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .mobile-br {
+        display: block;
+    }
 }
