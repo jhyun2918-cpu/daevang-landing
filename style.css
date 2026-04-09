@@ -57,7 +57,7 @@ header {
 }
 
 .logo {
-    font-size: 1.8rem;
+    font-size: 3.5rem;
     font-weight: 900;
     letter-spacing: -1px;
     line-height: 1.1;
@@ -707,20 +707,21 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .logo { font-size: 1.3rem; }
+    .logo { font-size: 1.8rem; }
     .header-btns { gap: 6px; }
     .hero h2 { font-size: 1.6rem; }
     
     /* 비즈니스 카드 모바일 최적화 */
     .contact-row {
-        flex-direction: column;
-        align-items: flex-end; /* 전체를 우측으로 정렬 */
-        gap: 10px;
+        flex-direction: row; /* 2개씩 한 줄에 배치 */
+        justify-content: flex-end; /* 우측 정렬 */
+        flex-wrap: wrap; /* 필요시 자동 줄바꿈으로 최적화 */
+        gap: 12px;
     }
     .contact-item {
-        font-size: 0.9rem;
-        justify-content: flex-end; /* 아이콘과 텍스트 묶음을 우측으로 밀기 */
-        width: 100%;
+        font-size: 0.8rem; /* 2개씩 넣기 위해 폰트 크기 최적화 */
+        justify-content: flex-end;
+        width: auto; /* 가로 폭 자동 조절 */
     }
     .address {
         flex-direction: column;
