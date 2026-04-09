@@ -3,8 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { JWT } = require('google-auth-library');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,43 +41,14 @@ const sendEmailNotification = async (newLead) => {
         console.log('이메일 알림 발송 완료');
     } catch (err) {
         console.error('이메일 발송 실패:', err);
+        throw err;
     }
 };
-
-// 구글 시트 설정
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const jwt = new JWT({
-    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    key: (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
-    scopes: SCOPES,
-});
-const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, jwt);
 
 // 미들웨어 설정
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
-
-// 구글 시트 저장 함수
-const saveToGoogleSheet = async (newLead) => {
-    try {
-        await doc.loadInfo();
-        const sheet = doc.sheetsByIndex[0];
-        await sheet.addRow({
-            '등록일시': new Date().toLocaleString('ko-KR'),
-            '소유자': `${newLead.ownerName} (${newLead.ownerPhone})`,
-            '접수자': `${newLead.regName} (${newLead.regPhone})`,
-            '매물종류': newLead.propertyType,
-            '거래유형': newLead.transactionType,
-            '주소': newLead.address,
-            '가격': `${newLead.salePrice}/${newLead.deposit}/${newLead.monthlyRent}`,
-            '상세내용': newLead.message
-        });
-        console.log('구글 시트 저장 완료:', newLead.ownerName);
-    } catch (err) {
-        console.error('구글 시트 저장 실패:', err);
-    }
-};
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -91,10 +60,7 @@ app.post('/api/register', async (req, res) => {
     try {
         const data = req.body;
         
-        // 1. 구글 시트에 저장
-        await saveToGoogleSheet(data);
-
-        // 2. 이메일 알림 발송
+        // 이메일 알림 발송
         await sendEmailNotification(data);
 
         res.status(200).json({ success: true, message: '접수 및 이메일 발송 완료' });
@@ -108,10 +74,15 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`========================================`);
-    console.log(`서버가 정상적으로 시작되었습니다.`);
-    console.log(`이메일 알림 모드 활성화`);
-    console.log(`주소: http://localhost:${port}`);
-    console.log(`========================================`);
-});
+// Vercel 배포 대응
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`========================================`);
+        console.log(`서버가 정상적으로 시작되었습니다.`);
+        console.log(`이메일 전용 알림 모드 활성화`);
+        console.log(`주소: http://localhost:${port}`);
+        console.log(`========================================`);
+    });
+}
+
+module.exports = app;
